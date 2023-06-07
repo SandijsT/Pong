@@ -22,13 +22,13 @@ namespace Pong.Controllers
         }
 
         [HttpPost]
-        public async void Post()
+        public async Task<bool> Post(Player player)
         {
-            var player = new Player();
+            player.Score = 0;
             await _context.Players.AddAsync(player);
             await _context.SaveChangesAsync();
 
-            return;
+            return true;
         }
     }
 }

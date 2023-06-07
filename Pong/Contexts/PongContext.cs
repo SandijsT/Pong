@@ -28,27 +28,34 @@ public partial class PongContext : DbContext
     {
         modelBuilder.Entity<Game>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.GameId).HasName("PK__Games__2AB897FD1E33B600");
 
-            entity.Property(e => e.Challanger).HasColumnName("challanger");
-            entity.Property(e => e.Date)
-                .HasColumnType("datetime")
-                .HasColumnName("date");
-            entity.Property(e => e.Opponent).HasColumnName("opponent");
-            entity.Property(e => e.Winner).HasColumnName("winner");
+            entity.Property(e => e.Date).HasColumnType("datetime");
+
+            entity.HasOne(d => d.ChallangerNavigation).WithMany(p => p.GameChallangerNavigations)
+                .HasForeignKey(d => d.Challanger)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Games__Challange__300424B4");
+
+            entity.HasOne(d => d.OpponentNavigation).WithMany(p => p.GameOpponentNavigations)
+                .HasForeignKey(d => d.Opponent)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Games__Opponent__30F848ED");
+
+            entity.HasOne(d => d.WinnerNavigation).WithMany(p => p.GameWinnerNavigations)
+                .HasForeignKey(d => d.Winner)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Games__Winner__31EC6D26");
         });
 
         modelBuilder.Entity<Player>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.PlayerId).HasName("PK__Players__4A4E74C85D8B7F96");
 
             entity.Property(e => e.Name)
                 .IsRequired()
-                .HasMaxLength(100)
-                .IsFixedLength()
-                .HasColumnName("name");
-            entity.Property(e => e.PlayerId).HasColumnName("playerId");
-            entity.Property(e => e.Score).HasColumnName("score");
+                .HasMaxLength(255)
+                .IsUnicode(false);
         });
 
         OnModelCreatingPartial(modelBuilder);
