@@ -14,6 +14,7 @@ namespace Pong.Controllers
         {
             _context = context;
         }
+
         [HttpGet]
         public IEnumerable<Game> Get()
         {
