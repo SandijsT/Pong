@@ -21,7 +21,7 @@ namespace Pong.Controllers
             return _context.Players.Select(row => row).ToArray();
         }
 
-        [HttpGet]
+        [HttpPost]
         public async void Post()
         {
             var player = new Player();
