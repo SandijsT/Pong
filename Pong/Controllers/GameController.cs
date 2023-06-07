@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Pong.Contexts;
 using Pong.Models;
 
 namespace Pong.Controllers
@@ -7,17 +8,16 @@ namespace Pong.Controllers
     [Route("[controller]")]
     public class GameController : ControllerBase
     {
+        private readonly PongContext _context;
+
+        public GameController(PongContext context)
+        {
+            _context = context;
+        }
         [HttpGet]
         public IEnumerable<Game> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new Game
-            {
-                Date = DateTime.Now.AddDays(index),
-                Challanger = Random.Shared.Next(-20, 55),
-                Opponent = Random.Shared.Next(-20, 55),
-                Winner = Random.Shared.Next(-20, 55)
-            })
-            .ToArray();
+            return _context.Games.Select(row => row).ToArray();
         }
     }
 }

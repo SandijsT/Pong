@@ -1,8 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using Pong.Contexts;
+
 var builder = WebApplication.CreateBuilder(args);
+ConfigurationManager configuration = builder.Configuration;
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+// For Entity Framework
+builder.Services.AddDbContext<PongContext>(options => options.UseSqlServer(configuration.GetConnectionString("ConnStr")));
 
 var app = builder.Build();
 
